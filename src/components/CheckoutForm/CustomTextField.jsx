@@ -2,7 +2,7 @@ import React from 'react';
 import { TextField, Grid, CheckBox } from '@material-ui/core';
 import {useFormContext, Controller, useForm} from "react-hook-form";
 
-function CustomTextField({name, label, required}) {
+function CustomTextField({name, label}) {
     const { control } = useForm();
     const onSubmit = data => console.log(data);
 
@@ -11,7 +11,6 @@ function CustomTextField({name, label, required}) {
             <Controller
                 name={name}
                 control={control}
-                rules={{ required: required }}
                 render={({ field: {onChange, onBlur, value} }) => (
                     <TextField
                         name={name}
@@ -20,6 +19,8 @@ function CustomTextField({name, label, required}) {
                         onChangeText={onChange}
                         onBlur={onBlur}
                         value={value}
+                        required
+                        style={{width: '100%'}}
                     />
                 )}
             />

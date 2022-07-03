@@ -4,12 +4,15 @@ import {Paper, Stepper, Step, StepLabel, Typography, CircularProgress, Divider, 
 import useStyles from './styles';
 import AddressForm from "../AddressForm";
 import PaymentForm from "../PaymentForm";
+import {collection, getDocs, query, setDoc, doc} from "firebase/firestore";
+import {db} from "../../../firebase";
 
 const steps=['Livrare', 'Detalii plată'];
 
-function Checkout() {
+function Checkout({cart, cartTotal, emptyCart}) {
     const classes = useStyles();
     const [activeStep, setActiveStep] = useState(0);
+    const [shippingData, setShippingData] = useState({});
 
     function Confirmation() {
         return (
@@ -20,7 +23,41 @@ function Checkout() {
     }
 
     function Form() {
-        return (activeStep === 0 ? <AddressForm /> : <PaymentForm />);
+        return (activeStep === 0 ? <AddressForm next={Next}/> : <PaymentForm cart={cart} cartTotal={cartTotal} decrementStep={decrementStep} placeOrder={PlaceOrder}/>);
+    }
+
+    function incrementStep() {
+        setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    }
+
+    function decrementStep() {
+        setActiveStep((prevActiveStep) => prevActiveStep - 1);
+    }
+
+    function Next(data) {
+        console.log(data);
+        setShippingData(data);
+        console.log(shippingData);
+
+        incrementStep();
+    }
+
+    async function PlaceOrder(data) {
+        const ordersQuery = query(collection(db, "order"));
+        let ordersList = await getDocs(ordersQuery);
+        ordersList = ordersList.docs.map(order => order.data());
+        ordersList.sort(function(a,b){return b.id-a.id});
+
+        let orderID = ordersList[0].id + 1;
+
+        let order = {...shippingData, ...data};
+        order.id = orderID;
+        order.paymentTotal = cartTotal;
+        console.log(order);
+
+        await setDoc(doc(db, "order", "" + orderID), order);
+
+        emptyCart();
     }
 
     return (

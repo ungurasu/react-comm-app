@@ -19,7 +19,7 @@ function App() {
         setCartTotal(tempTotal);
     }
 
-    const fetchProducts = async () => {
+    async function fetchProducts() {
         const productsQuery = query(collection(db, "products"));
 
         let productsList = await getDocs(productsQuery);
@@ -81,7 +81,7 @@ function App() {
                 <Routes>
                     <Route exact path={"/"} element={<Products products={products} onAddToCart={handleUpdateCartQuantity}/>} />
                     <Route exact path={"/cart"} element={<Cart cart={cart} handleUpdateCartQuantity={handleUpdateCartQuantity} handleRemoveFromCart={handleRemoveFromCart} handleEmptyCart={handleEmptyCart}/>} />
-                    <Route exact path={"/checkout"} element={<CheckOut/>} />
+                    <Route exact path={"/checkout"} element={<CheckOut cart={cart} cartTotal={cartTotal} emptyCart={handleEmptyCart}/>} />
                 </Routes>
             </div>
         </Router>
