@@ -34,11 +34,13 @@ function Cart({cart, handleUpdateCartQuantity, handleRemoveFromCart, handleEmpty
         return (
             <>
                 <Grid container spacing={3}>
-                    {cart.map((product) => (
+                    {cart ? cart.map((product) => (
                         <Grid item xs={12} sm={4} key={product.id}>
                             <CartItem product={product} handleUpdateCartQuantity={handleUpdateCartQuantity} handleRemoveFromCart={handleRemoveFromCart}/>
                         </Grid>
-                    ))}
+                    )) : (
+                        <div class={"alert alert-danger"}>Nu exista cart!</div>
+                    )}
                 </Grid>
                 <div className={classes.cardDetails}>
                     <Typography variant={"h4"}>

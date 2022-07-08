@@ -35,7 +35,7 @@ function App() {
         let product = products.find(single_product => single_product.id == productId);
         let productClone = {};
 
-        if (addedProduct !== undefined) {
+        if (addedProduct) {
             addedProduct.quantity += quantity;
             if (addedProduct.quantity <= 0) {
                 handleRemoveFromCart(productId);

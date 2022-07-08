@@ -6,14 +6,16 @@ function Review({cart, cartTotal}) {
         <>
             <Typography variant={"h6"} gutterBottom>Sumar comandă</Typography>
             <List disablePadding>
-                {cart.map((product) => (
+                {cart ? cart.map((product) => (
                     <ListItem style={{padding: '10px 0'}} key={product.name}>
                         <ListItemText primary={product.name} secondary={`Cantitate: ${product.quantity}`}/>
                         <Typography variant={"body2"}>
                             {Math.round((product.price * product.quantity + Number.EPSILON) * 100) / 100} Lei
                         </Typography>
                     </ListItem>
-                ))}
+                )) : (
+                    <div class={"alert alert-danger"}>Nu exista cart!</div>
+                )}
                 <ListItem style={{padding: "10px 0"}}>
                     <ListItemText primary={"Total"}/>
                     <Typography variant={"subtitle1"} style={{fontWeight: 700}}>
